@@ -20,10 +20,9 @@ class CompaniesController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationStyle()
         
         view.backgroundColor = UIColor.white
-        
+        navigationItem.title = "Companies"
         setupTableViewSettings()
         
         let plusImage = UIImage(named: "plus")
@@ -31,25 +30,19 @@ class CompaniesController: UITableViewController {
     }
     
     func setupTableViewSettings() {
-        self.tableView.separatorStyle = .none
+//        self.tableView.separatorStyle = .none
+        self.tableView.separatorColor = UIColor.white
         self.tableView.backgroundColor = UIColor.darkBlue
         self.tableView.tableFooterView = UIView() //blank view
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID) //You get cell type by using .self
     }
     
-    func handleAddCompany() {
-        print(123)
+    @objc func handleAddCompany() {
+        let createCompanyController = CreateCompanyController()
+        let navController = UINavigationController(rootViewController: createCompanyController)
+        present(navController, animated: true, completion: nil)
     }
-    
-    func setupNavigationStyle() {
-        
-        navigationItem.title = "Companies"
-        
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.barTintColor = UIColor.lightRed
-        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-    }
-    
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         view.backgroundColor = UIColor.lightBlue
@@ -78,7 +71,6 @@ class CompaniesController: UITableViewController {
         let company = companies[indexPath.row]
         
         cell.textLabel?.text = company.name
-//        cell.detailTextLabel.text = company.founded
         cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         

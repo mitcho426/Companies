@@ -16,6 +16,7 @@
 		1D3AB30F1FB6998600C14745 /* CompaniesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3AB30E1FB6998600C14745 /* CompaniesUITests.swift */; };
 		1D3AB31E1FB6A59400C14745 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3AB31D1FB6A59400C14745 /* Extensions.swift */; };
 		1D3AB3211FB6AC1F00C14745 /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3AB3201FB6AC1F00C14745 /* Company.swift */; };
+		1D3AB3241FB6B36100C14745 /* CreateCompanyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3AB3231FB6B36100C14745 /* CreateCompanyController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		1D3AB3101FB6998600C14745 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1D3AB31D1FB6A59400C14745 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		1D3AB3201FB6AC1F00C14745 /* Company.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
+		1D3AB3231FB6B36100C14745 /* CreateCompanyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateCompanyController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,10 +103,10 @@
 		1D3AB2ED1FB6998500C14745 /* Companies */ = {
 			isa = PBXGroup;
 			children = (
+				1D3AB2EE1FB6998500C14745 /* AppDelegate.swift */,
+				1D3AB3221FB6B32A00C14745 /* Controllers */,
 				1D3AB31F1FB6AC0F00C14745 /* Models */,
 				1D3AB31C1FB6A58000C14745 /* Helpers */,
-				1D3AB2EE1FB6998500C14745 /* AppDelegate.swift */,
-				1D3AB2F01FB6998500C14745 /* CompaniesController.swift */,
 				1D3AB2F21FB6998500C14745 /* Main.storyboard */,
 				1D3AB2F51FB6998500C14745 /* Assets.xcassets */,
 				1D3AB2F71FB6998500C14745 /* LaunchScreen.storyboard */,
@@ -145,6 +147,15 @@
 				1D3AB3201FB6AC1F00C14745 /* Company.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		1D3AB3221FB6B32A00C14745 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				1D3AB2F01FB6998500C14745 /* CompaniesController.swift */,
+				1D3AB3231FB6B36100C14745 /* CreateCompanyController.swift */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,20 +221,23 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = mwong;
 				TargetAttributes = {
 					1D3AB2EA1FB6998500C14745 = {
 						CreatedOnToolsVersion = 8.3.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 					1D3AB2FE1FB6998600C14745 = {
 						CreatedOnToolsVersion = 8.3.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 1D3AB2EA1FB6998500C14745;
 					};
 					1D3AB3091FB6998600C14745 = {
 						CreatedOnToolsVersion = 8.3.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 1D3AB2EA1FB6998500C14745;
 					};
@@ -283,6 +297,7 @@
 			files = (
 				1D3AB2F11FB6998500C14745 /* CompaniesController.swift in Sources */,
 				1D3AB31E1FB6A59400C14745 /* Extensions.swift in Sources */,
+				1D3AB3241FB6B36100C14745 /* CreateCompanyController.swift in Sources */,
 				1D3AB2EF1FB6998500C14745 /* AppDelegate.swift in Sources */,
 				1D3AB3211FB6AC1F00C14745 /* Company.swift in Sources */,
 			);
@@ -349,7 +364,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -357,7 +374,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -399,7 +420,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -407,7 +430,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -440,7 +467,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codepath.Companies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -452,7 +480,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codepath.Companies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -465,7 +494,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codepath.CompaniesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Companies.app/Companies";
 			};
 			name = Debug;
@@ -479,7 +509,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codepath.CompaniesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Companies.app/Companies";
 			};
 			name = Release;
@@ -492,7 +523,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codepath.CompaniesUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = Companies;
 			};
 			name = Debug;
@@ -505,7 +537,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.codepath.CompaniesUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = Companies;
 			};
 			name = Release;
@@ -529,6 +562,7 @@
 				1D3AB3151FB6998600C14745 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1D3AB3161FB6998600C14745 /* Build configuration list for PBXNativeTarget "CompaniesTests" */ = {
 			isa = XCConfigurationList;
@@ -537,6 +571,7 @@
 				1D3AB3181FB6998600C14745 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1D3AB3191FB6998600C14745 /* Build configuration list for PBXNativeTarget "CompaniesUITests" */ = {
 			isa = XCConfigurationList;
@@ -545,6 +580,7 @@
 				1D3AB31B1FB6998600C14745 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
