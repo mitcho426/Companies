@@ -8,11 +8,10 @@
 
 import UIKit
 
-class CompaniesController: UITableViewController {
+class CompaniesController: UITableViewController, CreateCompanyControllerDelegate {
     
     let cellID = "cellID"
-    
-    let companies = [
+    var companies = [
         Company(name: "Apple", founded: Date()),
         Company(name: "Google", founded: Date()),
         Company(name: "Salesforce", founded: Date())
@@ -29,6 +28,12 @@ class CompaniesController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: plusImage?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
     }
     
+    func didAddCompany(company: Company) {
+        companies.append(company)
+        let newIndexPath = IndexPath(row: companies.count-1, section: 0)
+        self.tableView.insertRows(at: [newIndexPath], with: .automatic)
+    }
+    
     func setupTableViewSettings() {
 //        self.tableView.separatorStyle = .none
         self.tableView.separatorColor = UIColor.white
@@ -40,6 +45,7 @@ class CompaniesController: UITableViewController {
     @objc func handleAddCompany() {
         let createCompanyController = CreateCompanyController()
         let navController = UINavigationController(rootViewController: createCompanyController)
+        createCompanyController.delegate = self
         present(navController, animated: true, completion: nil)
     }
 
@@ -78,6 +84,6 @@ class CompaniesController: UITableViewController {
         
         return cell
     }
-
 }
+
 
