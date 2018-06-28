@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 //Custom delegation
 protocol CreateCompanyControllerDelegate {
@@ -30,27 +31,49 @@ class CreateCompanyController: UIViewController {
         tf.placeholder = "Enter Name"
         return tf
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = UIColor.darkBlue
-        navigationItem.title = "Create Company"
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
+        self.setupNavigationItems()
         self.setupUI()
     }
     
+    func setupNavigationItems() {
+        navigationItem.title = "Create Company"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
+    }
+    
     @objc private func handleSave() {
-        if let name = nameTextField.text {
-            let company = Company(name: name, founded: Date())
-            self.delegate?.didAddCompany(company: company)
-            dismiss(animated: true, completion: nil)
-        } else {
-            print("Please enter in text!")
-            return
+        print("Trying to save...")
+        //Step 1 : init core data stack
+        let persistentContainer = NSPersistentContainer(name: "Companie_Models")
+        persistentContainer.loadPersistentStores { (storeDescription, err) in
+            if let err = err {
+                fatalError("Loading of store failed \(err)")
+            }
         }
+        //Step 2 : create object and insert into context
+        let context = persistentContainer.viewContext
+        let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
+        company.setValue(nameTextField.text, forKey: "name")
+        
+        //Step 3 : Perform save on context
+        do {
+            try context.save()
+        } catch let saveErr {
+            print("Failed to save company: \(saveErr)")
+        }
+//        if let name = nameTextField.text {
+//            let company = Company(name: name, founded: Date())
+//            self.delegate?.didAddCompany(company: company)
+//            dismiss(animated: true, completion: nil)
+//        } else {
+//            print("Please enter in text!")
+//            return
+//        }
     }
     
     private func setupUI() {

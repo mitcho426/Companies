@@ -7,23 +7,47 @@
 //
 
 import UIKit
+import CoreData
 
 class CompaniesController: UITableViewController, CreateCompanyControllerDelegate {
     
     let cellID = "cellID"
-    var companies = [
-        Company(name: "Apple", founded: Date()),
-        Company(name: "Google", founded: Date()),
-        Company(name: "Salesforce", founded: Date())
-    ]
+    var companies = [Company]()
+    
+    private func fetchCompanies() {
+        let persistentContainer = NSPersistentContainer(name: "Companie_Models")
+        
+        persistentContainer.loadPersistentStores { (storeDescription, err) in
+            if let err = err {
+                fatalError("Loading of store failed \(err)")
+            }
+        }
+        
+        let context = persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
+        
+        do {
+            let companies = try context.fetch(fetchRequest)
+            companies.forEach({ (company) in
+                print(company.name ?? "")
+            })
+        } catch let fetchError {
+            print("Failed to fetch companies:", fetchError)
+        }
+        
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.white
+        self.setupNavigationItems()
+        self.setupTableViewSettings()
+        self.fetchCompanies()
+    }
+    
+    func setupNavigationItems() {
         navigationItem.title = "Companies"
-        setupTableViewSettings()
-        
         let plusImage = UIImage(named: "plus")
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: plusImage?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
     }
