@@ -15,22 +15,15 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
     var companies = [Company]()
     
     private func fetchCompanies() {
-        let persistentContainer = NSPersistentContainer(name: "Companie_Models")
-        
-        persistentContainer.loadPersistentStores { (storeDescription, err) in
-            if let err = err {
-                fatalError("Loading of store failed \(err)")
-            }
-        }
-        
-        let context = persistentContainer.viewContext
+        let context = CoreDataManager.shared.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
-        
         do {
             let companies = try context.fetch(fetchRequest)
             companies.forEach({ (company) in
                 print(company.name ?? "")
             })
+            self.companies = companies
+            self.tableView.reloadData()
         } catch let fetchError {
             print("Failed to fetch companies:", fetchError)
         }
@@ -59,11 +52,10 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
     }
     
     func setupTableViewSettings() {
-//        self.tableView.separatorStyle = .none
         self.tableView.separatorColor = UIColor.white
         self.tableView.backgroundColor = UIColor.darkBlue
         self.tableView.tableFooterView = UIView() //blank view
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID) //You get cell type by using .self
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
     }
     
     @objc func handleAddCompany() {
@@ -71,6 +63,33 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         let navController = UINavigationController(rootViewController: createCompanyController)
         createCompanyController.delegate = self
         present(navController, animated: true, completion: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (_, indexPath) in
+            
+            //Step 1 : Delete from tableView UI
+            let company = self.companies[indexPath.row]
+            self.companies.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            //Step 2 : Delete from Coredata Database
+            let context = CoreDataManager.shared.persistentContainer.viewContext
+            context.delete(company)
+            
+            do {
+                try context.save()
+            } catch let saveError {
+                print("Failed to delete company:", saveError)
+            }
+        }
+        
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, indexPath) in
+//            let company = self.companies[indexPath.row]
+            print("Attemping to edit")
+        }
+        
+        return [deleteAction, editAction]
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -109,5 +128,3 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         return cell
     }
 }
-
-
