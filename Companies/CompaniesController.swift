@@ -71,7 +71,7 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         createCompanyController.delegate = self
         present(navController, animated: true, completion: nil)
     }
-    
+    //Mark : DELETE AND UPDATE CORE DATA
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (_, indexPath) in
             
@@ -132,10 +132,19 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         
         let company = companies[indexPath.row]
         
-        cell.textLabel?.text = company.name
+        //If name and founded does exist
+        if let name = company.name, let founded = company.founded {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM dd, yyyy"
+            let foundedDateString = dateFormatter.string(from: founded)
+            let dateString = "\(name) - Founded: \(foundedDateString)"
+            cell.textLabel?.text = dateString
+        } else {
+            cell.textLabel?.text = company.name
+        }
+        
         cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        
         cell.backgroundColor = UIColor.tealColor
         
         return cell
