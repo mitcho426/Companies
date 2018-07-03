@@ -12,10 +12,15 @@ import CoreData
 //Custom delegation
 protocol CreateCompanyControllerDelegate {
     func didAddCompany(company: Company)
+    func didEditCompany(company: Company)
 }
 
 class CreateCompanyController: UIViewController {
-    
+    var company: Company? {
+        didSet {
+            nameTextField.text = company?.name
+        }
+    }
     var delegate: CreateCompanyControllerDelegate?
 
     let nameLabel: UILabel = {
@@ -40,13 +45,25 @@ class CreateCompanyController: UIViewController {
         self.setupUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        navigationItem.title = company != nil ? "Edit Company" : "Create Company"
+    }
+    
     func setupNavigationItems() {
-        navigationItem.title = "Create Company"
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
     }
     
     @objc private func handleSave() {
+        if company == nil {
+            createCompany()
+        } else {
+            saveCompanyChanges()
+        }
+    }
+    //CREATE : CORE DATA
+    private func createCompany() {
         print("Trying to save...")
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
@@ -61,6 +78,21 @@ class CreateCompanyController: UIViewController {
             })
         } catch let saveErr {
             print("Failed to save company: \(saveErr)")
+        }
+    }
+    
+    //UPDATE : CORE DATA
+    func saveCompanyChanges() {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        //if company is not nil, then we are editing
+        company?.name = nameTextField.text
+        do {
+            try context.save()
+            dismiss(animated: true, completion: {
+                self.delegate?.didEditCompany(company: self.company!)
+            })
+        } catch let saveError {
+            print("Failed to save company: \(saveError)")
         }
     }
     

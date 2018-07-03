@@ -27,7 +27,6 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         } catch let fetchError {
             print("Failed to fetch companies:", fetchError)
         }
-        
     }
 
     override func viewDidLoad() {
@@ -45,10 +44,18 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: plusImage?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
     }
     
+    
+    //Mark : CreateCompanyDelegate methods
     func didAddCompany(company: Company) {
         companies.append(company)
         let newIndexPath = IndexPath(row: companies.count-1, section: 0)
         self.tableView.insertRows(at: [newIndexPath], with: .automatic)
+    }
+    
+    func didEditCompany(company: Company) {
+        let row = company.index(ofAccessibilityElement: company)
+        let reloadIndexPath = IndexPath(row: row, section: 0)
+        tableView.reloadRows(at: [reloadIndexPath], with: .middle)
     }
     
     func setupTableViewSettings() {
@@ -77,6 +84,7 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
             let context = CoreDataManager.shared.persistentContainer.viewContext
             context.delete(company)
             
+            //Step 3 : Save context
             do {
                 try context.save()
             } catch let saveError {
@@ -84,12 +92,17 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
             }
         }
         
-        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, indexPath) in
-//            let company = self.companies[indexPath.row]
-            print("Attemping to edit")
-        }
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit", handler: editActionHandler)
         
         return [deleteAction, editAction]
+    }
+
+    private func editActionHandler(action: UITableViewRowAction, indexPath: IndexPath) {
+        let editCompanyController = CreateCompanyController()
+        editCompanyController.delegate = self
+        editCompanyController.company = self.companies[indexPath.row]
+        let navController = CustomNavigationController(rootViewController: editCompanyController)
+        present(navController, animated: true, completion: nil)
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
