@@ -145,6 +145,10 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         
         cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        
+        if let imageData = company.imageData {
+            cell.imageView?.image = UIImage(data: imageData)
+        }
         cell.backgroundColor = UIColor.tealColor
         
         return cell

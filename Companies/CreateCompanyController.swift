@@ -19,10 +19,14 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
     var company: Company? {
         didSet {
             nameTextField.text = company?.name
+            if let imageData = company?.imageData {
+                companyImageView.image = UIImage(data: imageData)
+            }
             guard let founded = company?.founded else { return }
             datePicker.date = founded
         }
     }
+
     var delegate: CreateCompanyControllerDelegate?
     
     lazy var companyImageView: UIImageView = {
@@ -31,7 +35,12 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
         iv.image = image
         //Remember to do this
         iv.isUserInteractionEnabled = true
+        iv.contentMode = .scaleAspectFill
         iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.clipsToBounds = true
+        iv.layer.cornerRadius = 50
+        iv.layer.borderColor = UIColor.darkBlue.cgColor
+        iv.layer.borderWidth = 2
         iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectPhoto)))
         return iv
     }()
@@ -44,7 +53,6 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
         
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        print(info)
         if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             companyImageView.image = editedImage
         }else if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
@@ -99,9 +107,10 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
         if company == nil {
             createCompany()
         } else {
-            saveCompanyChanges()
+            updateCompanyChanges()
         }
     }
+    
     //CREATE : CORE DATA
     private func createCompany() {
         print("Trying to save...")
@@ -111,9 +120,13 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
         //Step 2 : Create company object so we can insert into context
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
         
-        //Step 3 : Set company
+        //Step 3 : Set company attributes
         company.setValue(nameTextField.text, forKey: "name")
         company.setValue(datePicker.date, forKey: "founded")
+        if let companyImage = companyImageView.image {
+            let imageData = UIImageJPEGRepresentation(companyImage, 0.8)
+            company.setValue(imageData, forKey: "imageData")
+        }
         
         //Step 4 : Perform save on context
         do {
@@ -128,12 +141,16 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
     }
     
     //UPDATE : CORE DATA
-    func saveCompanyChanges() {
+    func updateCompanyChanges() {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         //if company is not nil, then we are editing
         company?.name = nameTextField.text
         company?.founded = datePicker.date
         
+        if let companyImage = companyImageView.image {
+            let imageData = UIImageJPEGRepresentation(companyImage, 0.8)
+            company?.imageData = imageData
+        }
         do {
             try context.save()
             dismiss(animated: true, completion: {
