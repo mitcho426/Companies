@@ -19,10 +19,11 @@ class CreateCompanyController: UIViewController {
     var company: Company? {
         didSet {
             nameTextField.text = company?.name
+            guard let founded = company?.founded else { return }
+            datePicker.date = founded
         }
     }
     var delegate: CreateCompanyControllerDelegate?
-
     let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Name"
@@ -99,6 +100,8 @@ class CreateCompanyController: UIViewController {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         //if company is not nil, then we are editing
         company?.name = nameTextField.text
+        company?.founded = datePicker.date
+        
         do {
             try context.save()
             dismiss(animated: true, completion: {
