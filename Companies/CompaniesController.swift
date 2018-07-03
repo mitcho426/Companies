@@ -41,7 +41,22 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
     func setupNavigationItems() {
         navigationItem.title = "Companies"
         let plusImage = UIImage(named: "plus")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: plusImage?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
+    }
+    
+    @objc private func handleReset() {
+        print("Attempting to delete all object")
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: Company.fetchRequest())
+        do {
+            try context.execute(batchDeleteRequest)
+            companies.removeAll()
+            tableView.reloadData()
+        } catch let deleteError {
+            print("Failed to delete objects from Core Data:", deleteError)
+        }
+        
     }
     
     
