@@ -46,19 +46,23 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
     }
     
     @objc private func handleReset() {
-        print("Attempting to delete all object")
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: Company.fetchRequest())
         do {
             try context.execute(batchDeleteRequest)
+            //Once deleteBatchRequest has succeeded
+            var indexPathsToRemove = [IndexPath]()
+            for(index, _) in companies.enumerated() {
+                let indexPath = IndexPath(row: index, section:0)
+                indexPathsToRemove.append(indexPath)
+            }
             companies.removeAll()
-            tableView.reloadData()
+            tableView.deleteRows(at: indexPathsToRemove, with: .left)
         } catch let deleteError {
             print("Failed to delete objects from Core Data:", deleteError)
         }
         
     }
-    
     
     //Mark : CreateCompanyDelegate methods
     func didAddCompany(company: Company) {
@@ -119,19 +123,29 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         let navController = CustomNavigationController(rootViewController: editCompanyController)
         present(navController, animated: true, completion: nil)
     }
-
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         view.backgroundColor = UIColor.lightBlue
         return view
     }
     
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.text = "No Companies available..."
+        label.textColor = UIColor.white
+        label.textAlignment = .center
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        return label
+    }
+    
+    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 50
+        return companies.count == 0 ? 150 : 0
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
