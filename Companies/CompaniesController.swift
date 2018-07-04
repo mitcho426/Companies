@@ -81,7 +81,7 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         self.tableView.separatorColor = UIColor.white
         self.tableView.backgroundColor = UIColor.darkBlue
         self.tableView.tableFooterView = UIView() //blank view
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        self.tableView.register(CompanyCell.self, forCellReuseIdentifier: cellID)
     }
     
     @objc func handleAddCompany() {
@@ -124,6 +124,8 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         present(navController, animated: true, completion: nil)
     }
     
+    
+    //Mark : TableView methods
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         view.backgroundColor = UIColor.lightBlue
@@ -152,34 +154,18 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         return 1
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return companies.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! CompanyCell
         let company = companies[indexPath.row]
-        
-        //If name and founded does exist
-        if let name = company.name, let founded = company.founded {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMM dd, yyyy"
-            let foundedDateString = dateFormatter.string(from: founded)
-            let dateString = "\(name) - Founded: \(foundedDateString)"
-            cell.textLabel?.text = dateString
-        } else {
-            cell.textLabel?.text = company.name
-        }
-        
-        cell.textLabel?.textColor = UIColor.white
-        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        
-        if let imageData = company.imageData {
-            cell.imageView?.image = UIImage(data: imageData)
-        }
-        cell.backgroundColor = UIColor.tealColor
-        
+        cell.company = company        
         return cell
     }
 }
