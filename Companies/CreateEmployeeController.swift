@@ -9,7 +9,13 @@
 import UIKit
 import CoreData
 
+protocol CreateEmployeeControllerDelegate {
+    func didAddEmployee(employee: Employee)
+}
+
 class CreateEmployeeController: UIViewController {
+    
+    var delegate: CreateEmployeeControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,13 +60,19 @@ class CreateEmployeeController: UIViewController {
     }
     
     @objc private func handleSave() {
+        print("Trying to save...")
         guard let employeeName = nameTextField.text else {return}
-        let error = CoreDataManager.shared.createEmployee(name: employeeName)
+        
+        let tuple = CoreDataManager.shared.createEmployee(name: employeeName)
+        let error = tuple.1
         
         if let e = error {
             print(e)
         } else {
-            dismiss(animated: true, completion: nil)
+            dismiss(animated: true, completion: {
+                let employee = tuple.0
+                self.delegate?.didAddEmployee(employee: employee!)
+            })
         }
         
     }

@@ -96,6 +96,24 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		1D31052F20EDB79500A0C887 /* Employees */ = {
+			isa = PBXGroup;
+			children = (
+				1D31052B20ED6BDA00A0C887 /* EmployeeController.swift */,
+				1D31052D20ED6E7900A0C887 /* CreateEmployeeController.swift */,
+			);
+			name = Employees;
+			sourceTree = "<group>";
+		};
+		1D31053020EDB7A700A0C887 /* Companies */ = {
+			isa = PBXGroup;
+			children = (
+				1D3AB2F01FB6998500C14745 /* CompaniesController.swift */,
+				1D3AB3231FB6B36100C14745 /* CreateCompanyController.swift */,
+			);
+			name = Companies;
+			sourceTree = "<group>";
+		};
 		1D3AB2E21FB6998500C14745 = {
 			isa = PBXGroup;
 			children = (
@@ -170,10 +188,8 @@
 		1D3AB3221FB6B32A00C14745 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				1D3AB2F01FB6998500C14745 /* CompaniesController.swift */,
-				1D31052B20ED6BDA00A0C887 /* EmployeeController.swift */,
-				1D3AB3231FB6B36100C14745 /* CreateCompanyController.swift */,
-				1D31052D20ED6E7900A0C887 /* CreateEmployeeController.swift */,
+				1D31053020EDB7A700A0C887 /* Companies */,
+				1D31052F20EDB79500A0C887 /* Employees */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
