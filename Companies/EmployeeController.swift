@@ -66,7 +66,14 @@ extension EmployeeController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         let employee = employees[indexPath.row]
-        cell.textLabel?.text = employee.name
+        
+        
+        if let taxId = employee.employeeInformation?.taxId {
+            cell.textLabel?.text = "\(employee.name ?? "" ) taxid :  \(taxId)"
+        } else {
+            cell.textLabel?.text = employee.name
+        }
+        
         cell.backgroundColor = UIColor.tealColor
         cell.textLabel?.textColor = UIColor.white
         return cell
