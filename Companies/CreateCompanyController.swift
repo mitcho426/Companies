@@ -162,15 +162,7 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
     }
     
     private func setupUI() {
-        let lightBlueBackGroundView = UIView()
-        lightBlueBackGroundView.backgroundColor = UIColor.lightBlue
-        lightBlueBackGroundView.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(lightBlueBackGroundView)
-        lightBlueBackGroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        lightBlueBackGroundView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        lightBlueBackGroundView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        lightBlueBackGroundView.heightAnchor.constraint(equalToConstant: 350).isActive = true
+        let lightBlueBackGroundView = self.setupLightBlueBackgroundView(height: 350)
         
         view.addSubview(companyImageView)
         companyImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true

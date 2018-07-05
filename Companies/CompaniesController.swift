@@ -25,9 +25,8 @@ class CompaniesController: UITableViewController {
     
     func setupNavigationItems() {
         navigationItem.title = "Companies"
-        let plusImage = UIImage(named: "plus")
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: plusImage?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
+        self.setupPlusButtonInNavBar(selector: #selector(handleAddCompany))
     }
     
     @objc private func handleReset() {
@@ -115,7 +114,6 @@ extension CompaniesController {
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (_, indexPath) in
             
-            
             let company = self.companies[indexPath.row]
             self.companies.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
@@ -133,6 +131,12 @@ extension CompaniesController {
         let editAction = UITableViewRowAction(style: .normal, title: "Edit", handler: editActionHandler)
         
         return [deleteAction, editAction]
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let employeeController = EmployeeController()
+        employeeController.company = companies[indexPath.row]
+        navigationController?.pushViewController(employeeController, animated: true)
     }
     
     private func editActionHandler(action: UITableViewRowAction, indexPath: IndexPath) {

@@ -8,7 +8,7 @@
 
 import CoreData
 
-class CoreDataManager {
+struct CoreDataManager {
     
     static let shared = CoreDataManager()
     
@@ -49,5 +49,20 @@ class CoreDataManager {
             print("Failed to delete objects from Core Data:", deleteError)
             return []
         }
+    }
+    
+    func createEmployee(name: String) -> Error? {
+        let context = self.persistentContainer.viewContext
+        //Create an employee
+        let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context)
+        employee.setValue(name, forKey: "name")
+        do {
+            try context.save()
+            return nil
+        } catch let saveError {
+            print("Failed to create an employee:", saveError)
+            return saveError
+        }
+        
     }
 }
