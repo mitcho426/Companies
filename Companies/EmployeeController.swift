@@ -30,14 +30,19 @@ class EmployeeController : UITableViewController {
     }
     
     private func fetchEmployees() {
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let request = NSFetchRequest<Employee>(entityName: "Employee")
-        do {
-            let employees = try context.fetch(request)
-            self.employees = employees
-        } catch let error {
-            print("We have a error:", error)
+        
+        guard let companyEmployees = company?.employees?.allObjects as? [Employee] else {
+            return
         }
+        self.employees = companyEmployees
+//        let context = CoreDataManager.shared.persistentContainer.viewContext
+//        let request = NSFetchRequest<Employee>(entityName: "Employee")
+//        do {
+//            let employees = try context.fetch(request)
+//            self.employees = employees
+//        } catch let error {
+//            print("We have a error:", error)
+//        }
     }
     
     private func setupNavigationItems() {
@@ -47,6 +52,7 @@ class EmployeeController : UITableViewController {
     @objc private func handleAdd() {
         let createEmployeeController = CreateEmployeeController()
         createEmployeeController.delegate = self
+        createEmployeeController.company = self.company
         let navController = UINavigationController(rootViewController: createEmployeeController)
         present(navController, animated: true, completion: nil)
     }
@@ -66,7 +72,6 @@ extension EmployeeController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         let employee = employees[indexPath.row]
-        
         
         if let taxId = employee.employeeInformation?.taxId {
             cell.textLabel?.text = "\(employee.name ?? "" ) taxid :  \(taxId)"

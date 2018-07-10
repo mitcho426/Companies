@@ -15,6 +15,7 @@ protocol CreateEmployeeControllerDelegate {
 
 class CreateEmployeeController: UIViewController {
     
+    var company: Company?
     var delegate: CreateEmployeeControllerDelegate?
     
     override func viewDidLoad() {
@@ -38,6 +39,20 @@ class CreateEmployeeController: UIViewController {
         return tf
     }()
     
+    let birthdayLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Birthday"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let birthdayTextField: UITextField = {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.placeholder = "MM DD YY"
+        return tf
+    }()
+    
     private func setupNavigationItems() {
         navigationItem.title = "Create Employee"
         self.setupCancelButton()
@@ -45,7 +60,8 @@ class CreateEmployeeController: UIViewController {
     }
     
     private func setupUI() {
-        _ = self.setupLightBlueBackgroundView(height: 350)
+        _ = self.setupLightBlueBackgroundView(height: 100)
+        
         view.addSubview(nameLabel)
         nameLabel.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         nameLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16).isActive = true
@@ -57,13 +73,26 @@ class CreateEmployeeController: UIViewController {
         nameTextField.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         nameTextField.bottomAnchor.constraint(equalTo: nameLabel.bottomAnchor).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        view.addSubview(birthdayLabel)
+        birthdayLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor).isActive = true
+        birthdayLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16).isActive = true
+        birthdayLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        birthdayLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        view.addSubview(birthdayTextField)
+        birthdayTextField.leftAnchor.constraint(equalTo: birthdayLabel.rightAnchor).isActive = true
+        birthdayTextField.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        birthdayTextField.bottomAnchor.constraint(equalTo: birthdayLabel.bottomAnchor).isActive = true
+        birthdayTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
     }
     
     @objc private func handleSave() {
         print("Trying to save...")
         guard let employeeName = nameTextField.text else {return}
         
-        let tuple = CoreDataManager.shared.createEmployee(name: employeeName)
+        let tuple = CoreDataManager.shared.createEmployee(name: employeeName, company: self.company!)
         let error = tuple.1
         
         if let e = error {
@@ -74,6 +103,5 @@ class CreateEmployeeController: UIViewController {
                 self.delegate?.didAddEmployee(employee: employee!)
             })
         }
-        
     }
 }

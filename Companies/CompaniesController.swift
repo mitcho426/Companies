@@ -18,8 +18,13 @@ class CompaniesController: UITableViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.white
+        
         self.setupNavigationItems()
         self.setupTableViewSettings()
+        self.fetchCompanies()
+    }
+    
+    func fetchCompanies() {
         self.companies = CoreDataManager.shared.fetchCompanies()
     }
     
@@ -38,7 +43,7 @@ class CompaniesController: UITableViewController {
     func setupTableViewSettings() {
         self.tableView.separatorColor = UIColor.white
         self.tableView.backgroundColor = UIColor.darkBlue
-        self.tableView.tableFooterView = UIView() //blank view
+        self.tableView.tableFooterView = UIView()
         self.tableView.register(CompanyCell.self, forCellReuseIdentifier: cellID)
     }
     

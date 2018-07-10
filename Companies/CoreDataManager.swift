@@ -51,12 +51,14 @@ struct CoreDataManager {
         }
     }
     
-    func createEmployee(name: String) -> (Employee?, Error?) {
+    func createEmployee(name: String, company: Company) -> (Employee?, Error?) {
         let context = self.persistentContainer.viewContext
         //Create an employee
         let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context) as! Employee
-        employee.setValue(name, forKey: "name")
         
+        employee.setValue(name, forKey: "name")
+        employee.company = company
+
         let employeeInformation = NSEntityDescription.insertNewObject(forEntityName: "EmployeeInformation", into: context) as! EmployeeInformation
         
         employeeInformation.taxId = "456"
