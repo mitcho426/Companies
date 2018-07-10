@@ -49,7 +49,7 @@ class CreateEmployeeController: UIViewController {
     let birthdayTextField: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "MM DD YY"
+        tf.placeholder = "MM/DD/YYYY"
         return tf
     }()
     
@@ -85,14 +85,28 @@ class CreateEmployeeController: UIViewController {
         birthdayTextField.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         birthdayTextField.bottomAnchor.constraint(equalTo: birthdayLabel.bottomAnchor).isActive = true
         birthdayTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
     }
     
     @objc private func handleSave() {
         print("Trying to save...")
-        guard let employeeName = nameTextField.text else {return}
         
-        let tuple = CoreDataManager.shared.createEmployee(name: employeeName, company: self.company!)
+        guard let employeeName = nameTextField.text else {return}
+        guard let employeeBirthday = birthdayTextField.text else {return}
+        guard let company = self.company else {return}
+    
+        if employeeBirthday.isEmpty {
+            showError(title: "Please enter birthday", message: "You have not entered a birthday")
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+        
+        guard let birthdayDate = dateFormatter.date(from: employeeBirthday) else {
+            showError(title: "Incorrect Date", message: "Birthdate must be in this format : MM/dd/yyyy")
+            return
+        }
+        
+        let tuple = CoreDataManager.shared.createEmployee(name: employeeName, birthday: birthdayDate, company: company)
         let error = tuple.1
         
         if let e = error {

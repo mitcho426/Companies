@@ -22,6 +22,7 @@ struct CoreDataManager {
         return container
     }()
     
+    
     func fetchCompanies() -> [Company] {
         let context = self.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
@@ -51,7 +52,7 @@ struct CoreDataManager {
         }
     }
     
-    func createEmployee(name: String, company: Company) -> (Employee?, Error?) {
+    func createEmployee(name: String, birthday: Date, company: Company) -> (Employee?, Error?) {
         let context = self.persistentContainer.viewContext
         //Create an employee
         let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context) as! Employee
@@ -61,9 +62,8 @@ struct CoreDataManager {
 
         let employeeInformation = NSEntityDescription.insertNewObject(forEntityName: "EmployeeInformation", into: context) as! EmployeeInformation
         
-        employeeInformation.taxId = "456"
+        employeeInformation.birthday = birthday
         employee.employeeInformation = employeeInformation
-//        employeeInformation.setValue("456", forKey: "taxId")
         
         do {
             try context.save()
@@ -74,4 +74,16 @@ struct CoreDataManager {
         }
         
     }
+    
+    //    func fetchEmployees() {
+    //        let context = CoreDataManager.shared.persistentContainer.viewContext
+    //        let request = NSFetchRequest<Employee>(entityName: "Employee")
+    //        do {
+    //            let employees = try context.fetch(request)
+    //            self.employees = employees
+    //        } catch let error {
+    //            print("We have a error:", error)
+    //        }
+    //    }
+
 }

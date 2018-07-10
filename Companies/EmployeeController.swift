@@ -35,14 +35,7 @@ class EmployeeController : UITableViewController {
             return
         }
         self.employees = companyEmployees
-//        let context = CoreDataManager.shared.persistentContainer.viewContext
-//        let request = NSFetchRequest<Employee>(entityName: "Employee")
-//        do {
-//            let employees = try context.fetch(request)
-//            self.employees = employees
-//        } catch let error {
-//            print("We have a error:", error)
-//        }
+
     }
     
     private func setupNavigationItems() {
@@ -73,8 +66,11 @@ extension EmployeeController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         let employee = employees[indexPath.row]
         
-        if let taxId = employee.employeeInformation?.taxId {
-            cell.textLabel?.text = "\(employee.name ?? "" ) taxid :  \(taxId)"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd, yyyy"
+        
+        if let birthday = employee.employeeInformation?.birthday {
+            cell.textLabel?.text = "\(employee.name ?? "" ) - \(dateFormatter.string(from:birthday))"
         } else {
             cell.textLabel?.text = employee.name
         }
