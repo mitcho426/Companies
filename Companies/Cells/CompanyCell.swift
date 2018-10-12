@@ -21,7 +21,6 @@ class CompanyCell: UITableViewCell {
             } else {
                 nameFoundedDateLabel.text = company?.name
             }
-            
             if let imageData = company?.imageData {
                 companyImageView.image = UIImage(data: imageData)
             }

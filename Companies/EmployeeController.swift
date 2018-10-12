@@ -26,16 +26,41 @@ class EmployeeController : UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         navigationItem.title = company?.name
-        
     }
     
+    var shortNameEmployees = [Employee]()
+    var longNameEmployees = [Employee]()
+    var reallyLongNameEmployees = [Employee]()
+    
+    var allEmployees = [[Employee]]()
+    
     private func fetchEmployees() {
-        
         guard let companyEmployees = company?.employees?.allObjects as? [Employee] else {
             return
         }
-        self.employees = companyEmployees
-
+        
+        shortNameEmployees = companyEmployees.filter({ (employee) -> Bool in
+            if let count = employee.name?.count {
+                return count <= 6
+            }
+            return false
+        })
+        
+        longNameEmployees = companyEmployees.filter({ (employee) -> Bool in
+            if let count = employee.name?.count {
+                return count > 6 && count < 9
+            }
+            return false
+        })
+        
+        reallyLongNameEmployees = companyEmployees.filter({ (employee) -> Bool in
+            if let count = employee.name?.count {
+                return count > 9
+            }
+            return false
+        })
+        
+        allEmployees = [shortNameEmployees, longNameEmployees, reallyLongNameEmployees]
     }
     
     private func setupNavigationItems() {
@@ -59,12 +84,17 @@ extension EmployeeController: CreateEmployeeControllerDelegate {
 }
 
 extension EmployeeController {
+    
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return employees.count
+        return allEmployees[section].count
     }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        let employee = employees[indexPath.row]
+//        let employee = employees[indexPath.row]
+        
+        let employee = allEmployees[indexPath.section][indexPath.row]
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd, yyyy"
@@ -78,5 +108,28 @@ extension EmployeeController {
         cell.backgroundColor = UIColor.tealColor
         cell.textLabel?.textColor = UIColor.white
         return cell
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return allEmployees.count
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel()
+        
+        if section == 0 {
+            label.text = "Short Name"
+        }
+        else if section == 1 {
+            label.text = "Long Name"
+        }
+        else {
+            label.text = "Really Long Name"
+        }
+        
+        label.backgroundColor = UIColor.lightBlue
+        label.textColor = UIColor.darkBlue
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        return label
     }
 }
